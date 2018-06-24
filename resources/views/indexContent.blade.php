@@ -12,7 +12,8 @@
                 <p>{{$item->discount}}% OFF</p>
             </div>
             @endif
-            <div class="product_img"><img src="{{asset('assets/images/products/'.$item->img->path)}}" alt="{{$item->title}}"></div>
+
+            <div class="product_img"><img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}"></div>
             <div class="product_info">
                 <p>{{$item->title}}</p>
             </div>
@@ -84,7 +85,7 @@
                                 <p>{{$item->title}}</p>
                             </div>
                             <div class="product-slide-info">
-                                <img src="{{asset('assets/images/products/'.$item->img->path)}}" alt="{{$item->title}}">
+                                <img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}">
                             </div>
                         </div>
                         <div class="slide-row">
@@ -118,7 +119,7 @@
                 @if($item->discount)
                 <span class="product-sale">{{$item->discount}}% off</span>
                 @endif
-                <img src="{{asset('assets/images/products/'.$item->img->path)}}" alt="{{$item->title}}">
+                <img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}">
                 <p>{{$item->title}}</p>
             </div>
 
@@ -140,22 +141,21 @@
         @set($curent,'front-slide')
     <div class="collections">
         @foreach($topComments as $item)
-
             <div class="collection-items">
                 <div class="collection-img">
                     <span class="lock"></span>
                     <div class="cube">
                         <div class="side front">
-                            <img src="{{asset('assets/images/products/'.$item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
+                            <img src="{{Storage::disk('s3')->url($item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
                         </div>
                         <div class="side back">
-                            <img src="{{asset('assets/images/products/'.$item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
+                            <img src="{{Storage::disk('s3')->url($item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
                         </div>
                         <div class="side left">
-                            <img src="{{asset('assets/images/products/'.$item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
+                            <img src="{{Storage::disk('s3')->url($item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
                         </div>
                         <div class="side right">
-                            <img src="{{asset('assets/images/products/'.$item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
+                            <img src="{{Storage::disk('s3')->url($item->article->img->colection[$i++])}}" alt="{{$item->article->title}}">
                         </div>
                     </div>
 

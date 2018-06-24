@@ -83,7 +83,7 @@
                                         <p>{{$item->discount}}% OFF</p>
                                     </div>
                                 @endif
-                                <div class="product_img"><img src="{{asset('assets/images/products/'.$item->img->path)}}" alt="{{$item->title}}"></div>
+                                <div class="product_img"><img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}"></div>
                                 <div class="product_info">
                                     <p>{{$item->title}}</p>
                                 </div>

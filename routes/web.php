@@ -15,7 +15,6 @@
 
 Route::resource('/','IndexController',['only'=>['index'],'names'=>['index'=>'home']]);
 
-
 Route::resource('article','ArticleController',['only'=>['index'],'names'=>['index'=>'allArticles']]);
 
 Route::get('category/{category}',['uses'=>'ArticleController@categoryArticle','as'=>'categoryArticle']);

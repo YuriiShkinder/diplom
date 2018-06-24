@@ -7,6 +7,7 @@ use App\Repositories\ArticleRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CommentRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class IndexController extends SiteController
 {
@@ -25,7 +26,6 @@ class IndexController extends SiteController
         $sliderItem=$this->getSliders();
         $sliders=view('slider')->with('sliders',$sliderItem)->render();
         $this->vars=array_add($this->vars,'sliders',$sliders);
-
         $content=view('indexContent')->with([
             'bestSellers'=> $this->article_rep->orderBy('discount',8),
             'manyLikes'=> $this->article_rep->orderBy('like',4),
@@ -40,6 +40,5 @@ class IndexController extends SiteController
             $articles=$this->article_rep->get();
             return $articles ? $articles->random(3):false;
     }
-
 
 }

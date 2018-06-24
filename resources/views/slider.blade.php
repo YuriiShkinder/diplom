@@ -3,7 +3,7 @@
     <div class="slides">
         @foreach($sliders as $item)
         <div class="slide-item ">
-            <img src="{{asset('assets/images/products/'.$item->img->path)}}" alt="{{$item->title}}">
+            <img src="{{ Storage::disk('s3')->url($item->img->slider) }}" alt="{{$item->title}}">
             <div class="slide-content">
                 <p>Бесплатная доставка</p>
                 <h1>{{$item->title}}</h1>
@@ -22,4 +22,4 @@
 
 </div>
 
-    @endif
+@endif

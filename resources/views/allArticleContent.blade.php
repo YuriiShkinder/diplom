@@ -78,7 +78,7 @@
                         <div class="go_to"><i class="fa fa-arrow-right"></i></div>
                     </div>
                     <div class="catalog_item_img">
-                        <img src="{{asset('assets/images/products/'.$item->img->path)}}" alt="{{$item->title}}">
+                        <img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}">
                     </div>
                     <div class="catalog_item_info">
                         <div class="top">
