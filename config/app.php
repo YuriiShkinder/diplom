@@ -147,6 +147,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -159,7 +160,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Lavary\Menu\ServiceProvider::class
+        Lavary\Menu\ServiceProvider::class,
+        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class
 
     ],
 
@@ -209,8 +211,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Menu'      => Lavary\Menu\Facade::class
-
+        'Menu'      => Lavary\Menu\Facade::class,
+        'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class
     ],
 
 ];

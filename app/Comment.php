@@ -15,4 +15,8 @@ class Comment extends Model
     public function article(){
         return $this->belongsTo(Article::class);
     }
+    
+    public function likes(){
+        return $this->hasMany(LikeComment::class);
+    }
 }

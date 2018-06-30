@@ -7,7 +7,7 @@
             <div class="slide-content">
                 <p>Бесплатная доставка</p>
                 <h1>{{$item->title}}</h1>
-                <a href="/">К товару</a>
+                <a href="{{route('showArticle',['category'=>$item->category->alias,'article'=>$item->id])}}">К товару</a>
 
             </div>
         </div>

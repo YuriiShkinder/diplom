@@ -6,9 +6,7 @@ use App\Category;
 use App\Repositories\ArticleRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CommentRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
+use DB;
 class IndexController extends SiteController
 {
 
@@ -24,11 +22,12 @@ class IndexController extends SiteController
     {
         $this->title='Home';
         $sliderItem=$this->getSliders();
+
         $sliders=view('slider')->with('sliders',$sliderItem)->render();
         $this->vars=array_add($this->vars,'sliders',$sliders);
         $content=view('indexContent')->with([
-            'bestSellers'=> $this->article_rep->orderBy('discount',8),
-            'manyLikes'=> $this->article_rep->orderBy('like',4),
+            'bestSellers'=> $this->article_rep->orderBy('discount',8)->load('category'),
+            'manyLikes'=> $this->article_rep->manyLikes(4),
             'topComments'=>   $this->comment_rep->topComments(6)
         ])->render();
         $this->vars=array_add($this->vars,'content',$content);
@@ -37,7 +36,7 @@ class IndexController extends SiteController
     }
 
     public function getSliders(){
-            $articles=$this->article_rep->get();
+            $articles=$this->article_rep->get('*',false,'category');
             return $articles ? $articles->random(3):false;
     }
 

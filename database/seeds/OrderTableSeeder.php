@@ -16,9 +16,8 @@ class OrderTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
         $faker = Faker\Factory::create();
-        $limit = 500;
+        $limit = 100;
         for ($i = 0; $i < $limit; $i++) {
-
             DB::table('orders')->insert([
                 'status' => rand(0,1),
                 'count' => $faker->numberBetween(1,10),

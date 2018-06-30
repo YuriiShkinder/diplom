@@ -18,22 +18,34 @@ class UsersTableSeeder extends Seeder
         $faker = Faker\Factory::create();
         $limit = 10;
 
-        File::deleteDirectory(public_path('assets/images/users'),  true);
-        File::makeDirectory(public_path('assets/images/users'), $mode = 0777, true, true);
+        Storage::disk('s3')->exists('users') ?  Storage::disk('s3')->deleteDirectory('users') : false;
         for ($i = 0; $i < $limit; $i++) {
-
-            DB::table('users')->insert([
-                'name' => $faker->firstName,
-                'last' => $faker->lastName,
-                'login' => $faker->unique()->word,
-                'phone' => $faker->phoneNumber,
-                'address' => $faker->address ,
-                'img' => $faker->image(public_path('assets/images/users'),340,280,'people',false),
-
-                'email' => $faker->email,
-                'password' => md5('111'),
-
-            ]);
+                $filepath = 'test.jpg';
+                $url = $faker->imageUrl(340,280,'people');
+                $fp = fopen($filepath, 'w+');
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_FILE, $fp);
+                $success = curl_exec($ch) && curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200;
+                fclose($fp);
+                curl_close($ch);
+                if (!$success) {
+                    unlink($filepath);
+                    return false;
+                }
+                $s3 = \Storage::disk('s3');
+                $name= "users/".str_random(6).".jpg";
+                if($s3->put($name, file_get_contents($filepath), 'public')){
+                    DB::table('users')->insert([
+                        'name' => $faker->firstName,
+                        'last' => $faker->lastName,
+                        'login' => $faker->unique()->word,
+                        'phone' => $faker->phoneNumber,
+                        'address' => $faker->address ,
+                        'img' => $name,
+                        'email' => $faker->email,
+                        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm',
+                    ]);
+                }
         }
     }
 }

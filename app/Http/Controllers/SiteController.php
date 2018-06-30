@@ -14,8 +14,8 @@ class SiteController extends Controller
     protected $order_rep;
     protected $user_rep;
     protected $brand_rep;
-    protected $title;
-    protected $template;
+    public $title;
+    public $template;
     protected $vars=[];
 
     public function __construct(CategoryRepository $categoryRepository)
@@ -23,7 +23,7 @@ class SiteController extends Controller
         $this->category_rep=$categoryRepository;
     }
 
-    protected function renderOutput()
+    public function renderOutput()
     {
 
         $menu=$this->getMenu();

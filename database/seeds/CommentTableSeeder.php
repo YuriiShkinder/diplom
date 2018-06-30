@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Carbon\Carbon;
 class CommentTableSeeder extends Seeder
 {
     /**
@@ -16,25 +16,28 @@ class CommentTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
         $faker = Faker\Factory::create();
-        $limit = 1000;
-        for ($i = 0; $i < $limit; $i++) {
+
+        for ($i = 0; $i < 50; $i++) {
 
             DB::table('comments')->insert([
                 'text' => $faker->text(200),
                 'parent_id'=>0,
-                'like' => $faker->numberBetween(0,50),
-                'dislike' => $faker->numberBetween(0,10),
                 'user_id' => \App\User::all()->random()->id,
                 'article_id' => \App\Article::all()->random()->id,
+                'created_at' => Carbon::now(),
             ]);
         }
-        $comments=\App\Comment::all();
-        $parent=$comments->random( $comments->count()/4);
-        $children=$comments->diff($parent);
 
-        $children->map(function ($item, $key) use ($parent){
-            $item->parent_id=$parent->random()->id;
-            $item->update();
-        });
+        for ($i = 0; $i < 80; $i++) {
+            $comment=\App\Comment::all()->random();
+            DB::table('comments')->insert([
+                'text' => $faker->text(200),
+                'parent_id'=>$comment->id,
+                'user_id' => \App\User::all()->random()->id,
+                'article_id' => $comment->article_id,
+                'created_at' => Carbon::now(),
+            ]);
+        }
+
     }
 }

@@ -27,7 +27,7 @@
                 </div>
                 @endif
             </div>
-            <a href="single.html" class="more">Больше <i class="fa fa-arrow-circle-o-right"></i></a>
+            <a href="{{route('showArticle',['category'=>$item->category->alias,'article'=>$item->id])}}" class="more">Больше <i class="fa fa-arrow-circle-o-right"></i></a>
         </div>
    @endforeach
     </div>
@@ -75,6 +75,7 @@
 
                             @default
                             @set($curent,'')
+
                         @endswitch
                     <div slide-number="{{$i}}"  class="side-slide {{$curent}}">
                         <div class="slide-row">
@@ -85,7 +86,7 @@
                                 <p>{{$item->title}}</p>
                             </div>
                             <div class="product-slide-info">
-                                <img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}">
+                                <img src="{{Storage::disk('s3')->url($item->img->colection[0])}}" alt="{{$item->title}}">
                             </div>
                         </div>
                         <div class="slide-row">
@@ -98,7 +99,7 @@
                                 </div>
                             </div>
                             <div class="product-slide-info">
-                                <button class="button9" type="button" name="button9">К товару </button>
+                                <a href="{{route('showArticle',['category'=>$item->category->alias,'article'=>$item->id])}}" class="button9" type="button" name="button9">К товару </a>
                             </div>
                         </div>
                     </div>
@@ -119,7 +120,7 @@
                 @if($item->discount)
                 <span class="product-sale">{{$item->discount}}% off</span>
                 @endif
-                <img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}">
+                <img src="{{Storage::disk('s3')->url($item->img->colection[0])}}" alt="{{$item->title}}">
                 <p>{{$item->title}}</p>
             </div>
 
@@ -165,7 +166,7 @@
                 <div class="btn-wrap">
                     <div class="btn">
                         <span>${{$item->article->price}}</span>
-                        <a href="single.html">К товару????</a>
+                        <a href="{{route('showArticle',['category'=>$item->article->category->alias,'article'=>$item->article->id])}}">К товару</a>
                         <div class="btn-img">
                             <img src="{{asset('assets/icon.png')}}" alt="">
                         </div>

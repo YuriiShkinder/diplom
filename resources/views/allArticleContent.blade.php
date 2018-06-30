@@ -1,7 +1,8 @@
 @if($articles && !$articles->isEmpty())
 <div class="catalog_content">
     <aside>
-        <form action="#" method="post">
+        <form action="{{route('articleFilter')}}" method="post">
+            @csrf
             <ul class="filter">
                 @if($categoryFilter)
                     @foreach($categoryFilter as $item)
@@ -19,8 +20,9 @@
                                             <div class="filter-checkbox">
                                                 <span class="{{isset($current) && $sub->id==$current?'checked':''}}"></span>
                                                 <span>{{$sub->title}}</span>
+
                                             </div>
-                                            <input checked="{{isset($current) && $sub->id==$current?'checked':''}}" type="checkbox" name="{{$item->id}}[]" value="{{$item->id}}">
+                                            <input checked="{{isset($current) && $sub->id==$current?'checked':''}}" type="checkbox" name="{{$sub->id}}" value="{{isset($current)&& $sub->id==$current?$sub->alias:0}}">
                                         </li>
 
                                     @endforeach
@@ -75,7 +77,7 @@
                 <div class="catalog_item">
                     <div class="catalog_item_buttons">
                         <div class="check"><i class="fa fa-search"></i></div>
-                        <div class="go_to"><i class="fa fa-arrow-right"></i></div>
+                        <div class="go_to"><a href="{{route('showArticle',['category'=>$item->category->alias,'article'=>$item->id])}}"><i class="fa fa-arrow-right"></i></a></div>
                     </div>
                     <div class="catalog_item_img">
                         <img src="{{Storage::disk('s3')->url($item->img->colection[rand(0,count($item->img->colection)-1)])}}" alt="{{$item->title}}">
@@ -90,15 +92,15 @@
                         <div class="bot">
                             <div class="catalog_item_price">{{$item->price}}$</div>
                             <div class="stars_block">
-                                <div class="stars_bg" style="width: {{$item->like}}%"></div>
+                                <div class="stars_bg" style="width: {{$item->count*20}}%"></div>
                                 <div class="stars_bg2"></div>
                                 <div class="stars_bg3"></div>
-                                <div class="stars">
-                                    <div class="star"></div>
-                                    <div class="star"></div>
-                                    <div class="star"></div>
-                                    <div class="star"></div>
-                                    <div class="star"></div>
+                                <div href="{{route('likeArticle',['article'=>$item->id])}}" class="stars">
+                                    <div  class="star {{Auth::user()? 'clickLike' : ''}}"></div>
+                                    <div class="star {{Auth::user()? 'clickLike' : ''}}"></div>
+                                    <div class="star {{Auth::user()? 'clickLike' : ''}}"></div>
+                                    <div class="star {{Auth::user()? 'clickLike' : ''}}"></div>
+                                    <div class="star {{Auth::user()? 'clickLike' : ''}}"></div>
                                 </div>
                             </div>
                         </div>
@@ -109,75 +111,76 @@
 
         </div>
     </div>
+    @if($articles instanceof \Illuminate\Pagination\LengthAwarePaginator)
+
+        @if(  $articles->lastPage() >= 3)
+            <ul class="pagination pagination-catalog">
+                @if ($articles->currentPage() !== 1)
+                    <li> <a class="first-page"  href="{{ $articles->url(($articles->currentPage()-1)) }}"></a></li>
+                @endif
+
+                @if ($articles->currentPage() == 1)
+                    <li> <a class="admin-active">{{ 1 }}</a></li>
+                @else
+                    <a href="{{ $articles->url(1) }}">1</a>
+                @endif
+
+                <li id="pagination-page"><a href="#">...</a>
+                    <ul class="subpagin">
+                        @for ($i = 2; $i < $articles->lastPage(); $i++)
+
+                            @if ($articles->currentPage() == $i)
+                                <li> <a class="admin-active">{{ $i }}</a></li>
+                            @else
+                                <li> <a href="{{ $articles->url($i) }}">{{ $i }}</a></li>
+                            @endif
+
+                        @endfor
+                    </ul>
+                </li>
+
+                @if ($articles->currentPage() == $articles->lastPage()-1)
+                    <li> <a class="admin-active">{{ $articles->lastPage()-1}}</a></li>
+                @else
+                    <a href="{{ $articles->url($articles->lastPage()-1) }}">{{$articles->lastPage()-1}}</a>
+                @endif
+                @if ($articles->currentPage() == $articles->lastPage())
+                    <li>  <a class="admin-active">{{ $articles->lastPage() }}</a></li>
+                @else
+                    <li> <a class="last-page" href="{{ $articles->url( $articles->currentPage()+1) }}"></a></li>
+                @endif
+
+            </ul>
+        @elseif($articles->lastPage() >1 && $articles->lastPage() < 4)
+            <ul class="pagination pagination-catalog">
+                @if ($articles->currentPage() !== 1)
+                    <li> <a class="first-page"  href="{{ $articles->url(($articles->currentPage()-1)) }}"></a></li>
+                @endif
+
+                @if ($articles->currentPage() == 1)
+                    <li> <a class="admin-active">{{ 1 }}</a></li>
+                @else
+                    <a href="{{ $articles->url(1) }}">1</a>
+                @endif
+
+                @if ($articles->currentPage() == 2)
+                    <li> <a class="admin-active">{{ 2 }}</a></li>
+                @else
+                    <a href="{{ $articles->url(1) }}">2</a>
+                @endif
+                @if ($articles->currentPage() == $articles->lastPage())
+                    <li>  <a class="admin-active">{{ $articles->lastPage() }}</a></li>
+                @else
+                    <li> <a class="last-page" href="{{ $articles->url( $articles->lastPage()) }}"></a></li>
+                @endif
+
+            </ul>
+        @endif
+
+    @endif
 </div>
 
-@if($articles instanceof \Illuminate\Pagination\LengthAwarePaginator)
 
-    @if(  $articles->lastPage() >= 3)
-        <ul class="pagination pagination-catalog">
-            @if ($articles->currentPage() !== 1)
-                <li> <a class="first-page"  href="{{ $articles->url(($articles->currentPage()-1)) }}"></a></li>
-            @endif
-
-            @if ($articles->currentPage() == 1)
-                <li> <a class="admin-active">{{ 1 }}</a></li>
-            @else
-                <a href="{{ $articles->url(1) }}">1</a>
-            @endif
-
-            <li id="pagination-page"><a href="#">...</a>
-                <ul class="subpagin">
-                    @for ($i = 2; $i < $articles->lastPage(); $i++)
-
-                        @if ($articles->currentPage() == $i)
-                            <li> <a class="admin-active">{{ $i }}</a></li>
-                        @else
-                            <li> <a href="{{ $articles->url($i) }}">{{ $i }}</a></li>
-                        @endif
-
-                    @endfor
-                </ul>
-            </li>
-
-            @if ($articles->currentPage() == $articles->lastPage()-1)
-                <li> <a class="admin-active">{{ $articles->lastPage()-1}}</a></li>
-            @else
-                <a href="{{ $articles->url($articles->lastPage()-1) }}">{{$articles->lastPage()-1}}</a>
-            @endif
-            @if ($articles->currentPage() == $articles->lastPage())
-                <li>  <a class="admin-active">{{ $articles->lastPage() }}</a></li>
-            @else
-                <li> <a class="last-page" href="{{ $articles->url( $articles->currentPage()+1) }}"></a></li>
-            @endif
-
-        </ul>
-    @elseif($articles->lastPage() >1 && $articles->lastPage() < 4)
-        <ul class="pagination pagination-catalog">
-            @if ($articles->currentPage() !== 1)
-                <li> <a class="first-page"  href="{{ $articles->url(($articles->currentPage()-1)) }}"></a></li>
-            @endif
-
-            @if ($articles->currentPage() == 1)
-                <li> <a class="admin-active">{{ 1 }}</a></li>
-            @else
-                <a href="{{ $articles->url(1) }}">1</a>
-            @endif
-
-            @if ($articles->currentPage() == 2)
-                <li> <a class="admin-active">{{ 2 }}</a></li>
-            @else
-                <a href="{{ $articles->url(1) }}">2</a>
-            @endif
-            @if ($articles->currentPage() == $articles->lastPage())
-                <li>  <a class="admin-active">{{ $articles->lastPage() }}</a></li>
-            @else
-                <li> <a class="last-page" href="{{ $articles->url( $articles->lastPage()) }}"></a></li>
-            @endif
-
-        </ul>
-    @endif
-
-@endif
 @else
     <p>Нет товаров</p>
 @endif

@@ -34,6 +34,10 @@ class RouteServiceProvider extends ServiceProvider
             return \App\Category::where('alias',$value)->first();
         });
 
+        $this->bind('user',function ($value){
+
+            return User::where('login',$value)->first();
+        });
 
     }
 

@@ -19,7 +19,6 @@ class CreateArticlesTable extends Migration
             $table->text('text');
             $table->text('desc');
             $table->text('img');
-            $table->integer('like')->default(0);
             $table->integer('category_id')->unsigned();
             $table->integer('brand_id')->unsigned();
             $table->integer('price');

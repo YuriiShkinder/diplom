@@ -16,7 +16,7 @@ class ArticlesTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
         $faker = Faker\Factory::create();
-        $limit = 12;
+        $limit = 50;
         Storage::disk('s3')->exists('slider') ?  Storage::disk('s3')->deleteDirectory('slider') : false;
         Storage::disk('s3')->exists('products') ?  Storage::disk('s3')->deleteDirectory('products') : false;
 
@@ -35,7 +35,6 @@ class ArticlesTableSeeder extends Seeder
                 'desc' => $faker->text(500),
                 'img' => $img,
                 'price' => $faker->numberBetween(50,5000) ,
-                'like' => $faker->numberBetween(10,75),
                 'discount' => $discount,
                 'category_id' => \App\Category::where('parent_id','>',0)->get()->random()->id,
                 'brand_id' => \App\Brand::all()->random()->id,

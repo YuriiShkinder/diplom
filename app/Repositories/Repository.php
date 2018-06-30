@@ -24,7 +24,7 @@ abstract class Repository
             $builder->where($where[0], $where[1]);
         }
         if ($load) {
-//            $builder->with('categories', 'comments');
+            $builder->with($load);
         }
 
         if ($pagination) {
