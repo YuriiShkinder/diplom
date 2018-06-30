@@ -188,6 +188,7 @@ namespace App\Http\Controllers;
         return response()->json(['success'=>['width'=>$width->count]]);
     }
 
+
         public function likeComment(Request $request,Comment $comment){
             $user=\Auth::user();
             if($user){
