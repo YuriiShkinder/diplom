@@ -3,7 +3,7 @@
     <aside>
         <form action="{{route('articleFilter')}}" method="post">
             @csrf
-            <ul class="filter">
+            <ul class="filter frontFilter">
                 @if($categoryFilter)
                     @foreach($categoryFilter as $item)
                         @if($item->parent_id==0)
@@ -17,7 +17,7 @@
                                     @foreach($categoryFilter->where('parent_id',$item->id) as $sub)
 
                                         <li>
-                                            <div class="filter-checkbox">
+                                            <div class="filter-checkbox frontCheck">
                                                 <span class="{{isset($current) && $sub->id==$current?'checked':''}}"></span>
                                                 <span>{{$sub->title}}</span>
 

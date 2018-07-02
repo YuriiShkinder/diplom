@@ -24,7 +24,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        Gate::define('VIEW_ADMIN', function ($user) {
+            return !$user->roles()->where('role_id','2')->get()->isEmpty();
+        });
 
-        //
     }
 }

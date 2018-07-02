@@ -40,7 +40,11 @@
                     @else
                         <ul>
                             <li><a href="{{route('acount')}}">Acount</a></li>
-                            <li> <a href="admin.html">Admin panel</a></li>
+                        @can('VIEW_ADMIN', Auth::user())
+
+                                <li> <a href="{{route('admin')}}">Admin panel</a></li>
+                            @endcan
+
                             <li> <a href="{{url('/logout')}}">Logout</a></li>
                         </ul>
                         My Account

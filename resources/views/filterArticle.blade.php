@@ -1,7 +1,5 @@
-@if($articles && !$articles->isEmpty())
-
-
-
+@if(empty($type))
+    @if($articles && !$articles->isEmpty())
 
         @foreach($articles as $item)
             <div class="catalog_item">
@@ -39,6 +37,29 @@
             </div>
         @endforeach
 
+    @else
+        <h3 style="padding: 50px 0; text-align: center;width: 100%;">Нет товаров</h3>
+    @endif
+
 @else
-    <h3 style="padding: 50px 0; text-align: center;width: 100%;">Нет товаров</h3>
+    @if($articles && !$articles->isEmpty())
+            @foreach($articles as $article)
+                <tr>
+                    <td>
+                        {{$article->id}}
+                    </td>
+                    <td>
+                        <a href="#"> {{$article->title}}</a>
+                    </td>
+                    <td> {{$article->discount}}%</td>
+                    <td> {{$article->price}}$</td>
+                    <td> <p> {{str_limit($article->text,200)}}</p> </td>
+                    <td> <img src="{{Storage::disk('s3')->url($article->img->colection[0])}}" alt=""> </td>
+                    <td> {{$article->category->title}}</td>
+                    <td > <a href="#">Удалить</a> </td>
+                </tr>
+            @endforeach
+    @else
+        <h3 style="padding: 50px 0; text-align: center;width: 100%;">Нет товаров</h3>
+    @endif
 @endif

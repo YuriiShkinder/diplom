@@ -11,8 +11,6 @@
 |
 */
 
-
-
 Route::resource('/','IndexController',['only'=>['index'],'names'=>['index'=>'home']]);
 
 Route::resource('article','ArticleController',['only'=>['index'],'names'=>['index'=>'allArticles']]);
@@ -89,5 +87,24 @@ Route::group(['prefix' => 'acount','middleware'=> 'auth'],function (){
 
     Route::post('/edit/foto', 'AcountController@editFoto')->name('editFoto');
 
+});
+
+Route::group(['prefix' => 'admin','middleware'=> 'auth'],function (){
+
+    Route::get('/', 'Admin\IndexController@index')->name('admin');
+
+    Route::get('/pagination', 'Admin\IndexController@pagination');
+
+    Route::get('/comments', 'Admin\IndexController@paginationComments');
+
+    Route::match(['get','post'],'/addcategory',['uses' => 'Admin\IndexController@addCategory','as' => 'addCategory']);
+
+    Route::match(['get','post'],'/edit/category/{category}', 'Admin\IndexController@editCategory')->name('editCategory');
+
+    Route::post('/delete/category/{category}', 'Admin\IndexController@deleteCategory')->name('deleteCategory');
+
+    Route::post('/delete/user/{user}', 'Admin\IndexController@deleteUser')->name('deleteUser');
+
+    Route::match(['get','post'],'/addArticle',['uses' => 'Admin\IndexController@addArticle','as' => 'addArticle']);
 });
 

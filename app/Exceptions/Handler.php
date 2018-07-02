@@ -62,6 +62,8 @@ class Handler extends ExceptionHandler
 
                   return  response( $obj->renderOutput());
 
+                case '403':
+                    return response('У вас нет прав доступа до админпанели ');
 
 
             }

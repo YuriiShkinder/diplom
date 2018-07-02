@@ -43,4 +43,5 @@ class User extends Authenticatable
         return $this->hasMany(LikeArticle::class);
     }
 
+
 }

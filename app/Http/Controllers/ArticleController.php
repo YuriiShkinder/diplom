@@ -76,7 +76,6 @@ namespace App\Http\Controllers;
             }
         });
 
-
         $this->title=$category->title;
         $content=view('allArticleContent')->with([
             'articles'=> $this->article_rep->getArticles(16,false,['category_id',$category->id]),
@@ -106,12 +105,13 @@ namespace App\Http\Controllers;
     }
 
     public function articleFilter(Request $request){
+
         $id=json_decode($request->get('id'));
 
         $max=$request->get('max');
         $min=$request->get('min');
 
-        if(!empty($id)){
+        if(!empty($id)) {
             $articles = $this->article_rep->model::whereIn('articles.category_id', $id)
                 ->whereBetween('articles.price', [$min, $max])
                 ->leftJoin('likes_articles', 'likes_articles.article_id', '=', 'articles.id')
@@ -120,7 +120,8 @@ namespace App\Http\Controllers;
                 ))
                 ->groupBy('articles.id')
                 ->get();
-        }else{
+        }
+        else{
             $articles = $this->article_rep->model::whereBetween('articles.price', [$min, $max])
                 ->leftJoin('likes_articles', 'likes_articles.article_id', '=', 'articles.id')
                 ->select(array('articles.*',
@@ -132,7 +133,7 @@ namespace App\Http\Controllers;
 
         if($request->get('type')==1){
                 $articles=$this->article_rep->check($articles);
-                $content=view('filterArticle')->with(['articles'=> $articles])->render();
+                $content=view('filterArticle')->with(['articles'=> $articles,'type'=>$request->get('route')])->render();
                 return response($content);
         }
 
