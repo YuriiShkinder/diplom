@@ -26,7 +26,7 @@ class RoleTableSeeder extends Seeder
         $roles=\App\Role::all();
         \App\User::all()->each(function ($item,$key) use ($roles){
                 DB::table('role_users')->insert([
-                    'role_id' => $roles->random()->id,
+                    'role_id' => $item->id == 1 ? 2 :  $roles->random()->id,
                     'user_id' =>  $item->id
 
                 ]);

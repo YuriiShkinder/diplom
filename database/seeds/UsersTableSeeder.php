@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
         $faker = Faker\Factory::create();
-        $limit = 10;
+        $limit = 5;
         DB::table('users')->insert([
             'name' => 'Yurii',
             'last' => 'Shkinder',
