@@ -16,7 +16,7 @@ class ArticlesTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
         $faker = Faker\Factory::create();
-        $limit = 30;
+        $limit = 20;
         Storage::disk('s3')->exists('slider') ?  Storage::disk('s3')->deleteDirectory('slider') : false;
         Storage::disk('s3')->exists('products') ?  Storage::disk('s3')->deleteDirectory('products') : false;
 
