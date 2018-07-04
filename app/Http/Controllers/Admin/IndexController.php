@@ -306,6 +306,7 @@ class IndexController extends SiteController
                         $name="products/".str_random(6).'.jpg';
                         $newPath[]=$name;
                         $image= Image::make($colection[$i])->resize(680,440)->encode('jpg');
+                        dd($image);
                         \Storage::disk('s3')->put($name, (string)$image, 'public');
                     }
                    $obj->colection=$newPath;
