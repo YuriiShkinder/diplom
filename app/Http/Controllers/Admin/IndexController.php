@@ -292,7 +292,7 @@ class IndexController extends SiteController
             $obj=new \stdClass();
 
             if ($request->hasFile('img') ){
-
+                dd(1212);
                 if($request->has('old_img')){
                     $old_img=explode(',',$request->get('old_img'));
                     foreach ($old_img as $i=>$img){
@@ -306,7 +306,7 @@ class IndexController extends SiteController
                         $name="products/".str_random(6).'.jpg';
                         $newPath[]=$name;
                         $image= Image::make($colection[$i])->resize(680,440)->encode('jpg');
-                        dd($image);
+
                         \Storage::disk('s3')->put($name, (string)$image, 'public');
                     }
                    $obj->colection=$newPath;
