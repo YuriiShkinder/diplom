@@ -291,6 +291,7 @@ $('#acount-avatar input[type=submit]').click(function (e) {
     }).responseText).href;
 
 $('.acount-img img').attr('src',href);
+
 })
 
 $('.admin-pag a').click(function (e) {
