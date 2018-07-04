@@ -28,7 +28,6 @@ class RoleTableSeeder extends Seeder
                 DB::table('role_users')->insert([
                     'role_id' => $item->id == 1 ? 2 :  $roles->random()->id,
                     'user_id' =>  $item->id
-
                 ]);
         });
     }
