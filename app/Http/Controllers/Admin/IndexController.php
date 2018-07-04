@@ -209,13 +209,14 @@ class IndexController extends SiteController
 
                 $colection = $request->file('img');
                 $slider = $request->file('slider');
+                dd(1212);
                 $s3 = \Storage::disk('s3');
                 if ($colection && $slider) {
                     $filePathColection =[];
                     for($i=0;$i< count($colection);$i++){
                         $filePathColection[$i]="products/".str_random(4).'.jpg';
                         $image= Image::make($colection[$i])->resize(680,440)->encode('jpg');
-                        dd(1212);
+
                          \Storage::disk('s3')->put($filePathColection[$i], (string)$image, 'public');
                     }
                     $filePathSlider = "slider/".str_random(6).'.jpg';
