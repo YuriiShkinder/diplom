@@ -12,7 +12,8 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "lavary/laravel-menu": "^1.7",
-        "league/flysystem-aws-s3-v3": "^1.0"
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "gd": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
