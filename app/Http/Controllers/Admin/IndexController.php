@@ -209,8 +209,7 @@ class IndexController extends SiteController
 
                 $colection = $request->file('img');
                 $slider = $request->file('slider');
-                dd(1212);
-                $s3 = \Storage::disk('s3');
+
                 if ($colection && $slider) {
                     $filePathColection =[];
                     for($i=0;$i< count($colection);$i++){
