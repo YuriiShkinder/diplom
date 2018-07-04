@@ -1,4 +1,5 @@
 <div class="modal-admin">
+
     <div class="modal-admin-content">
     <form  action="{{isset($article)? route('editArticle',['aticle'=>$article->id]) :route('addArticle')}}" method="post" enctype="multipart/form-data">
         @csrf
@@ -19,6 +20,13 @@
                     <input type="text" name="price" value="{{isset($article) ? $article->price  : old('price')}}" placeholder="Введите цену товара">
                 </div>
             </li>
+            <li class="taxt-field">
+                <label for="acount">Скидка товара</label>
+                <div class="input-prepend">
+                    <span><i class="fa fa-check-circle-o" aria-hidden="true"></i></span>
+                    <input type="text" name="discount" value="{{isset($article) ? $article->discount  : old('discount')}}" placeholder="Введите цену скидки">
+                </div>
+            </li>
             <li class="taxtarea-field">
                 <label for="acount">Описание</label>
                 <div  class="input-prepend">
@@ -32,7 +40,7 @@
                 </div>
             </li>
             <li class="taxt-field">
-                <label for="acount">Заголовок</label>
+                <label for="acount">Категория</label>
                 <div class="input-prepend">
                     <span><i class="fa fa-check-circle-o" aria-hidden="true"></i></span>
                     <select class="admin-select" name="category_id" >
@@ -48,10 +56,10 @@
             </li>
 
             <li class="taxt-field">
-                <label for="acount">Заголовок</label>
+                <label for="acount">Бренд</label>
                 <div class="input-prepend">
                     <span><i class="fa fa-check-circle-o" aria-hidden="true"></i></span>
-                    <select class="admin-select" name="parent_id" >
+                    <select class="admin-select" name="brand_id" >
 
                         @foreach($brends as $item)
                             @if(isset($article) && $item->id == $article->brand_id)
@@ -64,13 +72,13 @@
                 </div>
             </li>
             <li class="taxtarea-field">
-
+                <label for="acount">Фото товара</label>
                     @csrf
                 <div class="acount-foto">
                 @if(isset($article) )
 
                         @foreach($article->img->colection as $item )
-                        <img height="200" src="{{Storage::disk('s3')->exists($item) ? Storage::disk('s3')->url($item) : ''}}" alt="foto">
+                        <img {{isset($article) ? 'class=editFotoArticle'  : ''}} height="100" src="{{Storage::disk('s3')->exists($item) ? Storage::disk('s3')->url($item) : ''}}" alt="foto">
                         @endforeach
 
                     @endif
@@ -78,14 +86,27 @@
                     <div class="file_upload">
                         <button type="button">Выбрать</button>
                         <div>Файлы не выбраны</div>
-                        <input type="file" name="file[]" multiple>
+                        <input type="file" name="img[]" multiple>
                     </div>
 
-
+            </li>
+            <li id="slider" class="taxtarea-field">
+                <label for="acount">Фото товара для слайдера</label>
+                @csrf
+                <div class="acount-foto">
+                    @if(isset($article) )
+                            <img {{isset($article)? 'class=editSliderArticle' : ''}} height="100" src="{{Storage::disk('s3')->exists($article->img->slider) ? Storage::disk('s3')->url($article->img->slider) : ''}}" alt="foto">
+                    @endif
+                </div>
+                <div class="file_upload">
+                    <button type="button">Выбрать</button>
+                    <div>Файлы не выбраны</div>
+                    <input  type="file" name="slider" multiple>
+                </div>
 
             </li>
         </ul>
-        <input id="addArticle"  type="submit" name="" value="Сохранить">
+        <input  type="submit" name="" value="Сохранить">
     </form>
     </div>
     </div>

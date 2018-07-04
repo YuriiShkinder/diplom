@@ -2253,7 +2253,7 @@ display: inline-block;
 }
 .taxtarea-field textarea{
   width: 100%;
-  max-height: 200px;
+  height: 100px;
   resize: none;
   padding: 10px;
   outline: 1px solid #eee;

@@ -16,7 +16,7 @@ class CategoryTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1");
 
         $faker = Faker\Factory::create();
-        $limit = 30;
+        $limit = 26;
         for ($i = 0; $i < $limit; $i++) {
             $title=$faker->unique()->word;
             DB::table('categories')->insert([

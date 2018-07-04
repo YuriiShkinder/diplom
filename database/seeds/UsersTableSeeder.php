@@ -17,7 +17,16 @@ class UsersTableSeeder extends Seeder
 
         $faker = Faker\Factory::create();
         $limit = 10;
-
+        DB::table('users')->insert([
+            'name' => 'Yurii',
+            'last' => 'Shkinder',
+            'login' => 'yurii',
+            'phone' => '+380686873719',
+            'address' => 'Odesa' ,
+            'img' => asset('assets/images/user.png'),
+            'email' => 'yurkaaa96@gmail.com',
+            'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm',
+        ]);
         Storage::disk('s3')->exists('users') ?  Storage::disk('s3')->deleteDirectory('users') : false;
         for ($i = 0; $i < $limit; $i++) {
                 $filepath = 'test.jpg';

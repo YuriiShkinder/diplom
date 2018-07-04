@@ -104,20 +104,21 @@
                             <td>Дествие</td>
                         </tr>
                         </thead>
+
                         @foreach($articles as $article)
                         <tr>
                             <td>
                                 {{$article->id}}
                             </td>
                             <td>
-                                <a href="#"> {{$article->title}}</a>
+                                <a id="editArticle" href="{{route('editArticle',['aticle'=>$article->id])}}"> {{$article->title}}</a>
                             </td>
                             <td> {{$article->discount}}%</td>
                             <td> {{$article->price}}$</td>
                             <td> <p> {{str_limit($article->text,200)}}</p> </td>
                             <td> <img src="{{Storage::disk('s3')->url($article->img->colection[0])}}" alt=""> </td>
                             <td> {{$article->category->title}}</td>
-                            <td > <a href="#">Удалить</a> </td>
+                            <td > <a class="deleteArticle" href="{{route('deleteArticle',['article'=>$article->id])}}">Удалить</a> </td>
                         </tr>
                         @endforeach
 
@@ -155,7 +156,7 @@
                         @if ($articles->currentPage() == $articles->lastPage()-1)
                             <li> <a class="admin-active">{{ $articles->lastPage()-1}}</a></li>
                         @else
-                            <a href="{{ $articles->url($articles->lastPage()-1) }}">{{$articles->lastPage()-1}}</a>
+                            <a href="{{ $articles->url($articles->lastPage()) }}">{{$articles->lastPage()}}</a>
                         @endif
                         @if ($articles->currentPage() == $articles->lastPage())
                             <li>  <a class="admin-active">{{ $articles->lastPage() }}</a></li>
@@ -211,13 +212,14 @@
                         </thead>
                         <tbody>
                         @foreach($comments as $article)
-                        <tr>
-                            <td>{{$article->id}}</td>
-                            <td><a href="">{{$article->title}}</a></td>
-                            <td>{{$article->comments->count()}}</td>
-                            <td>{{$article->category->title}}</td>
-                        </tr>
-
+                            @if($article->comments->count()>=1)
+                                <tr>
+                                    <td>{{$article->id}}</td>
+                                    <td><a class="viewComments" href="{{route('viewComments',['articles'=>$article->id])}}">{{$article->title}}</a></td>
+                                    <td>{{$article->comments->count()}}</td>
+                                    <td>{{$article->category->title}}</td>
+                                </tr>
+                            @endif
                         @endforeach
                         </tbody>
                     </table>
@@ -227,15 +229,7 @@
             @if($comments instanceof \Illuminate\Pagination\LengthAwarePaginator)
                 @if(  $comments->lastPage() >= 3)
                     <ul class="pagination pagination-catalog  admin-pag">
-                        @if ($comments->currentPage() !== 1)
-                            <li> <a class="first-page"  href="{{ $comments->url(($comments->currentPage()-1)) }}"></a></li>
-                        @endif
-
-                        @if ($comments->currentPage() == 1)
-                            <li> <a class="admin-active" href="{{$comments->url(1)}}"> 1 </a></li>
-
-                        @endif
-
+                        <li> <a href="{{ $comments->url(1) }}" >{{1}}</a></li>
                         <li id="pagination-page"><a href="#">...</a>
                             <ul class="subpagin">
                                 @for ($i = 2; $i < $comments->lastPage(); $i++)
@@ -250,14 +244,7 @@
                             </ul>
                         </li>
 
-                        @if ($comments->currentPage() == $comments->lastPage()-1)
-                            <li> <a class="admin-active">{{ $comments->lastPage()-1}}</a></li>
-                        @else
-                            <a href="{{ $comments->url($comments->lastPage()-1) }}">{{$comments->lastPage()-1}}</a>
-                        @endif
-                        @if ($comments->currentPage() == $comments->lastPage())
-                            <li>  <a class="admin-active">{{ $comments->lastPage() }}</a></li>
-                        @endif
+                        <li> <a href="{{ $comments->url($comments->lastPage()) }}" >{{ $comments->lastPage()}}</a></li>
 
                     </ul>
                 @elseif($comments->lastPage() >1 && $comments->lastPage() < 4)

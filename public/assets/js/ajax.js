@@ -375,8 +375,11 @@ $('.filter input[type="submit"], .adminCheck').click(function(e){
     })
 
 })
-
+var old_img=[];
+var images=-1;
 $('.modal-submit').click(function(e){
+    images=-1;
+    old_img=[];
     e.preventDefault();
     var url=$(this).attr('href');
     $.ajax({
@@ -390,17 +393,20 @@ $('.modal-submit').click(function(e){
     })
 })
 
-$(document).on('submit','.modal-admin form',function (e) {
+$(document).on('submit','.modal-admin form:not(.editComment)',function (e) {
     e.preventDefault();
     var url=$(this).attr('action');
-    var data=$(this).serializeArray();
+    // var data=$(this).serializeArray();
     var that=$(this);
+    var data = new FormData($(this)[0]);
     $.ajax({
         url: url,
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        cache: false,
+        contentType: false,
+        processData: false,
+        async:false,
         type: 'POST',
-        datatype: 'JSON',
-        async: false,
         data: data,
         success:function (html) {
             if(html.error){
@@ -416,7 +422,12 @@ $(document).on('submit','.modal-admin form',function (e) {
                 that.slideUp(500,function () {
                     $(this).parent().parent().remove();
                 })
-                $('.admin-active').parent().find('.admin-articles').empty().html(html.html)
+                if(html.type){
+                    $('.admin-active').parent().find('.admin-articles tbody').empty().html(html.html)
+                }else {
+                    $('.admin-active').parent().find('.admin-articles').empty().html(html.html)
+                }
+
                 $('body').prepend(`<div class="message">${html.success}</div>`);
             }
             setTimeout(function () {
@@ -507,10 +518,13 @@ $('#acount-avatar input[type=submit]').click(function (e) {
 
     $('.acount-img img').attr('src',href);
 })
+
 $(document).on('click','#addArticle',function (e) {
+    images=-1;
     e.preventDefault();
     var url=$(this).parent().attr('action');
     var data = new FormData($(this).parent()[0]);
+    var that = $(this);
     $.ajax({
         url: url,
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -520,30 +534,189 @@ $(document).on('click','#addArticle',function (e) {
         async:false,
         type: 'POST',
         data: data,
-        success: function (result) {
+        success: function (html) {
+            if(html.error){
+                var msg='';
+                for (key in html.error) {
+                    for (var i=0; i< html.error[key].length;i++){
+                        msg+='<p>'+html.error[key][i]+'</p>';
+                    }
+                }
+                $('body').prepend(`<div class="message">${msg}</div>`);
+            }
+            if(html.success){
+                that.closest('.modal-admin').remove();
+                $('body').prepend(`<div class="message">${html.success}</div>`);
+            }
 
+            setTimeout(function () {
+                $('.message').remove();
+            },3000)
         }
     });
 
 })
+
 $(document).on('change','.taxtarea-field input[type=file]',function () {
-    var preview = $('.acount-foto').html('');
+var editFoto=4-$(this).closest('.taxtarea-field').find('.acount-foto .editFotoArticle').length;
+console.log(editFoto);
+$(this).closest('.taxtarea-field').find('.acount-foto img:not(".editFotoArticle")').remove();
+    var preview = $(this).closest('.taxtarea-field').find('.acount-foto');
     var files    = $(this)[0].files;
-if(files.length>0 && files.length<=4){
-    for (var i=0; i<files.length; i++){
-        var reader = new FileReader();
-        reader.onload=function(e){
-            preview.append(`<img height="100" src="${e.target.result}">`)
+ if($(this).closest('#slider').length>0){
+     var reader = new FileReader();
+     reader.onload=function(e){
+         preview.append(`<img height="100" src="${e.target.result}">`)
+     }
+     reader.readAsDataURL(files[0])
+
+    $( this ).siblings('div').text(files[0].name);
+ }else{
+     if(images==-1){
+         if (editFoto!=0) {
+         if(files.length==4 ){
+             for (var i=0; i<4; i++){
+                 var reader = new FileReader();
+                 reader.onload=function(e){
+                     preview.append(`<img height="100" src="${e.target.result}">`)
+                 }
+                 reader.readAsDataURL(files[i])
+             }
+             $( this ).siblings('div').text(files.length+' files');
+         }else {
+             $('body').prepend(`<div class="message">Фотграфий должно быть 4 шт.</div>`);
+             setTimeout(function () {
+                 $('.message').remove();
+             },3000)
+         }
+         }else {
+             $(this).val('');
+             $('body').prepend(`<div class="message"> Удалите несколько фото что-бы добавить новые</div>`);
+             setTimeout(function () {
+                 $('.message').remove();
+             },3000)
+         }
+     }else {
+         if(files.length==editFoto){
+             for (var i=0; i<editFoto; i++){
+                 var reader = new FileReader();
+                 reader.onload=function(e){
+                     preview.append(`<img height="100" src="${e.target.result}">`)
+                 }
+                 reader.readAsDataURL(files[i])
+             }
+             $( this ).siblings('div').text(files.length+' files');
+         }else {
+             $('body').prepend(`<div class="message">Фотграфий должно быть ${editFoto} шт.</div>`);
+             setTimeout(function () {
+                 $('.message').remove();
+             },3000)
+         }
+     }
+ }
+})
+
+$(document).on('click','#editArticle',function (e) {
+    images=-1;
+    e.preventDefault();
+    var url=$(this).attr('href');
+    $.ajax({
+        url: url,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        type: 'GET',
+        async: false,
+        success:function (html) {
+            $('#admin').prepend(html);
         }
-        reader.readAsDataURL(files[i])
+    })
+})
+
+$(document).on('click','.editFotoArticle',function () {
+    $(this).hide(500,function () {
+        $(this).remove();
+    })
+    old_img.push($(this).attr('src'))
+        if($(this).siblings('input[type=hidden]').length>0){
+            images++;
+            $(this).siblings('input[name=old_img]').val(old_img)
+        }else {
+            images=1;
+            $(this).after('<input type=hidden name=old_img>')
+            $(this).siblings('input[name=old_img]').val(old_img)
+        }
+})
+
+$(document).on('click','.editSliderArticle',function () {
+    $(this).hide(500,function () {
+        $(this).remove();
+    })
+    if($(this).siblings('input[type=hidden]').length>0){
+        $(this).siblings('input[name=old_slider]').val(1)
+    }else {
+
+        $(this).after('<input type=hidden name=old_slider>')
+        $(this).siblings('input[name=old_slider]').val(1)
     }
-    $( ".file_upload div" ).text(files.length+' files');
-}else {
-    $('body').prepend(`<div class="message">Фотграфий должно быть не больше 4 шт.</div>`);
-    setTimeout(function () {
-        $('.message').remove();
-    },3000)
-}
+})
 
+$(document).on('click','.deleteArticle',function (e) {
+    e.preventDefault();
+    var url=$(this).attr('href');
+    $.ajax({
+        url: url,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        type: 'POST',
+        async: false,
+        success:function (html) {
+            if(html.success){
+                $('.admin-active').parent().find('.admin-articles tbody').empty().html(html.html)
+                $('body').prepend(`<div class="message">${html.success}</div>`);
+            }
+            if(html.error){
+                $('body').prepend(`<div class="message">${html.error}</div>`);
+            }
+            setTimeout(function () {
+                $('.message').remove();
+            },3000)
+        }
+    })
+})
 
+$(document).on('click','.viewComments',function (e) {
+    e.preventDefault();
+    var url=$(this).attr('href');
+    $.ajax({
+        url: url,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        type: 'GET',
+        async: false,
+        success:function (html) {
+            $('#admin').prepend(html);
+        }
+    })
+})
+
+$(document).on('submit','.editComment',function (e) {
+    e.preventDefault();
+    var url=$(this).attr('action');
+    var data = new FormData($(this)[0]);
+    $.ajax({
+        url: url,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        cache: false,
+        contentType: false,
+        processData: false,
+        async:false,
+        type: 'POST',
+        data: data,
+        success: function (html) {
+            if(html.success){
+                $('body').prepend(`<div class="message">${html.success}</div>`);
+            }
+
+            setTimeout(function () {
+                $('.message').remove();
+            },3000)
+        }
+    });
 })

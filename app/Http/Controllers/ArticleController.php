@@ -29,7 +29,8 @@ namespace App\Http\Controllers;
         $this->title='Все товары';
         $content=view('allArticleContent')->with([
             'articles'=> $this->article_rep->getArticles(12),
-            'categoryFilter'=>$this->category_rep->get()
+            'categoryFilter'=>$this->category_rep->get(),
+            'max'=>$this->article_rep->model->get()->max('price')
 
         ])->render();
         $this->vars=array_add($this->vars,'content',$content);

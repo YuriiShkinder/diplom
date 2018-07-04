@@ -38,7 +38,7 @@
                             <div class="range-input">
                                 <input data='min' type="text" name="min" value="0">
                                 <span>-</span>
-                                <input data='max'  type="text" name="max" value="{{$articles->max('price')}}">
+                                <input data='max'  type="text" name="max" value="{{isset($max)? $max : $articles->max('price')}}">
                             </div>
 
                             <div id="first-range">
@@ -48,7 +48,7 @@
 
                                 </div>
                                 <span>0</span>
-                                <span>{{$articles->max('price')}}</span>
+                                <span>{{isset($max)? $max : $articles->max('price')}}</span>
                             </div>
                         </div>
                     </div>

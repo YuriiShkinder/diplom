@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::resource('/','IndexController',['only'=>['index'],'names'=>['index'=>'home']]);
 
 Route::resource('article','ArticleController',['only'=>['index'],'names'=>['index'=>'allArticles']]);
@@ -106,5 +107,13 @@ Route::group(['prefix' => 'admin','middleware'=> 'auth'],function (){
     Route::post('/delete/user/{user}', 'Admin\IndexController@deleteUser')->name('deleteUser');
 
     Route::match(['get','post'],'/addArticle',['uses' => 'Admin\IndexController@addArticle','as' => 'addArticle']);
+
+    Route::match(['get','post'],'/editArticle/{article}',['uses' => 'Admin\IndexController@editArticle','as' => 'editArticle']);
+
+    Route::post('/delete/article/{article}', 'Admin\IndexController@deleteArticle')->name('deleteArticle');
+
+    Route::get('/view/comments/{article}',['uses'=>'Admin\IndexController@viewComments','as'=>'viewComments']);
+
+    Route::post('/edit/comment/{comment}', 'Admin\IndexController@editComment')->name('editComment');
 });
 
