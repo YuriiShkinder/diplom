@@ -206,6 +206,7 @@ class IndexController extends SiteController
             }
 
             if ($request->hasFile('img') && $request->hasFile('slider')) {
+                dd(1212);
                 $colection = $request->file('img');
                 $slider = $request->file('slider');
                 $s3 = \Storage::disk('s3');
@@ -292,7 +293,7 @@ class IndexController extends SiteController
             $obj=new \stdClass();
 
             if ($request->hasFile('img') ){
-                dd(1212);
+
                 if($request->has('old_img')){
                     $old_img=explode(',',$request->get('old_img'));
                     foreach ($old_img as $i=>$img){
