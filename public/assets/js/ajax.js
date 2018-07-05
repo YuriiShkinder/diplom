@@ -632,9 +632,7 @@ $(document).on('click','#editArticle',function (e) {
 })
 
 $(document).on('click','.editFotoArticle',function () {
-    $(this).hide(500,function () {
-        $(this).remove();
-    })
+
     old_img.push($(this).attr('src'))
         if($(this).siblings('input[type=hidden]').length>0){
             images++;
@@ -644,19 +642,24 @@ $(document).on('click','.editFotoArticle',function () {
             $(this).after('<input type=hidden name=old_img>')
             $(this).siblings('input[name=old_img]').val(old_img)
         }
-})
 
-$(document).on('click','.editSliderArticle',function () {
     $(this).hide(500,function () {
         $(this).remove();
     })
+})
+
+$(document).on('click','.editSliderArticle',function () {
+
     if($(this).siblings('input[type=hidden]').length>0){
         $(this).siblings('input[name=old_slider]').val(1)
     }else {
-
         $(this).after('<input type=hidden name=old_slider>')
         $(this).siblings('input[name=old_slider]').val(1)
     }
+
+    $(this).hide(500,function () {
+        $(this).remove();
+    })
 })
 
 $(document).on('click','.deleteArticle',function (e) {
