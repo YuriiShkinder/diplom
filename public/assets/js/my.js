@@ -535,14 +535,14 @@ $(".single_img").hover(
     }
 )
 
-    $('body').on('mouseover','.clickLike',function () {
+    $(document).on('mouseover','.clickLike',function () {
         var ind = $(this).index() + 1;
         var wid = $(this).width();
         var hoverWidth = ind * wid;
         $(this).parent().siblings(".stars_bg3").css({"width":hoverWidth + 'px'});
     });
 
-    $('body').on('mouseout','.clickLike',function () {
+    $(document).on('mouseout','.clickLike',function () {
         $(".stars_bg3").css({"width":"0"})
     });
 

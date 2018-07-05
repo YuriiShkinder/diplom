@@ -212,7 +212,7 @@ $('.reviews').on('submit','form',function(e){
     $('.comment_textarea').show();
 })
 
-$('body ').on('click','.clickLike',function (e) {
+$(document).on('click','.clickLike',function (e) {
     var count= $(this).index();
     var url=$(this).parent().attr('href');
 
@@ -221,7 +221,7 @@ $('body ').on('click','.clickLike',function (e) {
     $(this).closest('.stars_block').children('.stars_bg').css({width: data.width*20+'%'});
 })
 
-$('body').on('click','.clickLikeComment',function (e) {
+$(document).on('click','.clickLikeComment',function (e) {
     var url=$(this).attr('href');
     var data=0;
     if ($(e.target).closest('.like').length){
@@ -251,7 +251,7 @@ $('body').on('click','.clickLikeComment',function (e) {
     $(this).find('.sum2').text(' '+-data.count[0].dislike);
 })
 
-$('body ').on('click','#acount-password input[type=submit]',function (e) {
+$(document).on('click','#acount-password input[type=submit]',function (e) {
     e.preventDefault();
     var url=$(this).parent().attr('action');
     var data=JSON.stringify($(this).parent().serializeArray());
