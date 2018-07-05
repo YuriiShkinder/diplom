@@ -95,7 +95,7 @@
                 @csrf
                 <div class="acount-foto">
                     @if(isset($article) )
-                            <img {{isset($article)  ? 'class=editSliderArticle' : ''}} height="100" src="{{Storage::disk('s3')->exists($article->img->slider) ? Storage::disk('s3')->url($article->img->slider) : ''}}" alt="foto">
+                            <img class="editSliderArticle" height="100" src="{{Storage::disk('s3')->exists($article->img->slider) ? Storage::disk('s3')->url($article->img->slider) : ''}}" alt="foto">
                     @endif
                 </div>
                 <div class="file_upload">

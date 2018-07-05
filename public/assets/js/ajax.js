@@ -649,17 +649,13 @@ $(document).on('click','.editFotoArticle',function () {
 })
 
 $(document).on('click','.editSliderArticle',function () {
-
     if($(this).siblings('input[type=hidden]').length>0){
         $(this).siblings('input[name=old_slider]').val(1)
     }else {
         $(this).after('<input type=hidden name=old_slider>')
         $(this).siblings('input[name=old_slider]').val(1)
     }
-
-    $(this).hide(500,function () {
-        $(this).remove();
-    })
+    $(this).remove();
 })
 
 $(document).on('click','.deleteArticle',function (e) {
