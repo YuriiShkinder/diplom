@@ -560,7 +560,6 @@ $(document).on('click','#addArticle',function (e) {
 
 $(document).on('change','.taxtarea-field input[type=file]',function () {
 var editFoto=4-$(this).closest('.taxtarea-field').find('.acount-foto .editFotoArticle').length;
-console.log(editFoto);
 $(this).closest('.taxtarea-field').find('.acount-foto img:not(".editFotoArticle")').remove();
     var preview = $(this).closest('.taxtarea-field').find('.acount-foto');
     var files    = $(this)[0].files;
